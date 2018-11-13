@@ -1,4 +1,4 @@
-# NostraUtils
+# NostraSocketWrapper
 A C wrapper for POSIX and Windows sockets.
 
 GitHub: https://github.com/NostraTeam/NostraSocketWrapper
