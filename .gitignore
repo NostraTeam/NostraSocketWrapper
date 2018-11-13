@@ -1,0 +1,11 @@
+# Usually hidden IDE directories
+/.vs
+/.vscode
+/.cproject
+/.project
+
+# Visual Studio CMake configuration file
+CMakeSettings.json
+
+# Build directory (lower and upper case writing are accepted)
+/[bB]uild
