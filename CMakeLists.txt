@@ -74,7 +74,6 @@ install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/"
 	COMPONENT
 		"Develop")
 
-#[==[
 if(NSW_BUILD_DOC)
 	
 	message(STATUS "NostraSocketWrapper: Attempting to generate Doxygen documentation.")
@@ -110,8 +109,6 @@ else()
 	message(STATUS "NostraSocketWrapper: Generation of documentation is disabled.")
 
 endif()
-#]==]
-
 
 # Function for simpler addition of tests
 function(nsw_add_test TEST_NAME)
