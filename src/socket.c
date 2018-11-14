@@ -1,6 +1,6 @@
 #include "nostrasocketwrapper/socket.h"
 
-#ifndef NWS_ERROR_H
+#ifndef NSW_ERROR_H
 #    include "nostrasocketwrapper/error.h"
 #endif
 
@@ -9,6 +9,8 @@
 #    include <sys/stat.h>
 #    include <unistd.h>
 #endif
+
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -63,6 +65,198 @@ extern "C"
         return ret;
     }
 
+    nsw_sockaddr_t *nsw_clear_sockaddr(nsw_sockaddr_t *sockaddr)
+    {
+        memset(sockaddr, 0, sizeof(nsw_sockaddr_t));
+    }
+
+    nsw_reterr_t nsw_connect(nsw_socket_t socket, const nsw_sockaddr_t *addr)
+    {
+#ifdef NSW_RESTORE_ERRNO
+        errno_t oldErrno = errno;
+#endif
+
+        int err = connect(socket, (sockaddr *)addr, sizeof(nsw_sockaddr_t));
+
+        if(err == -1)
+        {
+            switch(errno)
+            {
+                case EACCES:
+                    nsw_setError(NSW_ERR_ACCESS_DENIED);
+                    break;
+
+                    // TODO
+
+                    // EINTR is possible, but missing in this switch
+            }
+
+#ifdef NSW_RESTORE_ERRNO
+            errno = oldErrno;
+#endif
+
+            return -1;
+        }
+
+        return 0;
+    }
+
+    nsw_reterr_t nsw_bind(nsw_socket_t socket, const nsw_sockaddr_t *addr)
+    {
+#ifdef NSW_RESTORE_ERRNO
+        errno_t oldErrno = errno;
+#endif
+
+        int err = bind(socket, (sockaddr *)addr, sizeof(nsw_sockaddr_t));
+
+        if(err == -1)
+        {
+            switch(errno)
+            {
+                case EACCES:
+                    nsw_setError(NSW_ERR_ACCESS_DENIED);
+                    break;
+
+                    // TODO
+
+                    // EINTR is possible, but missing in this switch
+            }
+
+#ifdef NSW_RESTORE_ERRNO
+            errno = oldErrno;
+#endif
+
+            return -1;
+        }
+
+        return 0;
+    }
+
+    nsw_reterr_t nsw_listen(nsw_socket_t socket, int backlog)
+    {
+#ifdef NSW_RESTORE_ERRNO
+        errno_t oldErrno = errno;
+#endif
+
+        int err = listen(socket, backlog);
+
+        if(err == -1)
+        {
+            switch(errno)
+            {
+                case EACCES:
+                    nsw_setError(NSW_ERR_ACCESS_DENIED);
+                    break;
+
+                    // TODO
+
+                    // EINTR is possible, but missing in this switch
+            }
+
+#ifdef NSW_RESTORE_ERRNO
+            errno = oldErrno;
+#endif
+
+            return -1;
+        }
+
+        return 0;
+    }
+
+    nsw_reterr_t nsw_accept(nsw_socket_t socket, const nsw_sockaddr_t *addr)
+    {
+#ifdef NSW_RESTORE_ERRNO
+        errno_t oldErrno = errno;
+#endif
+
+        socklen_t len = sizeof(nsw_sockaddr_t);
+        int err       = accept(socket, (sockaddr *)addr, &len);
+
+        if(err == -1)
+        {
+            switch(errno)
+            {
+                case EACCES:
+                    nsw_setError(NSW_ERR_ACCESS_DENIED);
+                    break;
+
+                    // TODO
+
+                    // EINTR is possible, but missing in this switch
+            }
+
+#ifdef NSW_RESTORE_ERRNO
+            errno = oldErrno;
+#endif
+
+            return -1;
+        }
+
+        return 0;
+    }
+
+    nsw_ssize_t nsw_send(nsw_socket_t socket, const void *data, size_t len, unsigned int flags)
+    {
+#ifdef NSW_RESTORE_ERRNO
+        errno_t oldErrno = errno;
+#endif
+
+        int err = send(socket, data, len, flags);
+
+        if(err == -1)
+        {
+            switch(errno)
+            {
+                case EACCES:
+                    nsw_setError(NSW_ERR_ACCESS_DENIED);
+                    break;
+
+                    // TODO
+
+                    // EINTR is possible, but missing in this switch
+            }
+
+#ifdef NSW_RESTORE_ERRNO
+            errno = oldErrno;
+#endif
+
+            return -1;
+        }
+
+        return 0;
+    }
+
+    nsw_ssize_t nsw_recv(nsw_socket_t socket, void *data, size_t len, unsigned int flags)
+    {
+#ifdef NSW_RESTORE_ERRNO
+        errno_t oldErrno = errno;
+#endif
+
+        int err = recv(socket, data, len, flags);
+
+        if(err == -1)
+        {
+            switch(errno)
+            {
+                case EACCES:
+                    nsw_setError(NSW_ERR_ACCESS_DENIED);
+                    break;
+
+                    // TODO
+
+                    // EINTR is possible, but missing in this switch
+            }
+
+#ifdef NSW_RESTORE_ERRNO
+            errno = oldErrno;
+#endif
+
+            return -1;
+        }
+
+        return 0;
+    }
+
     nsw_reterr_t nsw_close(nsw_socket_t socket)
     {
 #ifdef NSW_RESTORE_ERRNO
@@ -78,7 +272,7 @@ extern "C"
                 case EBADF:
                     nsw_setError(NSW_ERR_INVALID_PARAMETER);
                     break;
-                case EIO: //it is not documented when this occurs
+                case EIO: // it is not documented when this occurs
                     nsw_setError(NSW_ERR_UNKNOWN);
                     break;
                 default:
