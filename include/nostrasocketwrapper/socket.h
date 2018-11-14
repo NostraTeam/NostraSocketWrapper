@@ -11,15 +11,12 @@
 \brief
 A component that provides the functions to enable working with sockets.
 
-\details
-None.
-
 \par_example
 \code{.cpp}
 \todo <EXAMPLE HERE>
 \endcode
 
-For a more detailed example, see \link socket.ex.cpp here\endlink.
+For a more detailed example, see \link socket.ex.c here\endlink.
 */
 
 /**
@@ -62,9 +59,6 @@ An example that demonstrates the usage of the functionality provided by the sock
 \brief
 The socket family for communication using IPv4.
 
-\details
-None.
-
 \author  Lukas Reichmann
 \version 1.0.0.0
 \since   1.0.0.0
@@ -74,9 +68,6 @@ None.
 /**
 \brief
 The socket family for communication using IPv6.
-
-\details
-None.
 
 \author  Lukas Reichmann
 \version 1.0.0.0
@@ -88,9 +79,6 @@ None.
 \brief
 The socket type for communication using TCP/IP.
 
-\details
-None.
-
 \author  Lukas Reichmann
 \version 1.0.0.0
 \since   1.0.0.0
@@ -100,9 +88,6 @@ None.
 /**
 \brief
 The socket type for communication using UDP.
-
-\details
-None.
 
 \author  Lukas Reichmann
 \version 1.0.0.0
@@ -118,9 +103,6 @@ extern "C"
     /**
     \brief
     The type of sockets.
-
-    \details
-    None.
 
     \author  Lukas Reichmann
     \version 1.0.0.0
@@ -145,9 +127,6 @@ extern "C"
     \brief
     The type of an socket type.
 
-    \details
-    None.
-
     \author  Lukas Reichmann
     \version 1.0.0.0
     \since   1.0.0.0
@@ -157,9 +136,6 @@ extern "C"
     /**
     \brief
     The type of a socket protocol.
-
-    \details
-    None.
 
     \author  Lukas Reichmann
     \version 1.0.0.0
@@ -307,7 +283,7 @@ extern "C"
     The socket to check.
 
     \return
-    \ilc{true}, if \ilc{socket} is a valid network socket, \ilc{false} if it is not.
+    \ilc{true}, if \ilc{socket} is a valid one, \ilc{false} if it is not.
 
     \brief
     Checks wheather a socket is valid and usable by the process.

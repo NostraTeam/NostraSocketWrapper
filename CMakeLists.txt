@@ -25,8 +25,8 @@ add_library(Nostra::SocketWrapper ALIAS NostraSocketWrapper)
 
 target_include_directories(NostraSocketWrapper
 	PUBLIC
-		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-		"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
+		"$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
+		"$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>"
 		"$<INSTALL_INTERFACE:include>")
 
 if(MSVC)
@@ -45,7 +45,7 @@ include(GenerateExportHeader)
 
 generate_export_header(NostraSocketWrapper 
 	BASE_NAME "nsw" 
-	EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/include/nostrasocketwrapper/export.h"
+	EXPORT_FILE_NAME "${CMAKE_BINARY_DIR}/include/nostrasocketwrapper/export.h"
 	DEFINE_NO_DEPRECATED)
 
 install(TARGETS NostraSocketWrapper EXPORT NostraSocketWrapperTargets
@@ -68,7 +68,7 @@ install(DIRECTORY "include"
 		"Develop")
 		
 # Install the additionally configured file(s)
-install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/" 
+install(DIRECTORY "${CMAKE_BINARY_DIR}/include/" 
 	DESTINATION 
 		"include"
 	COMPONENT
@@ -92,7 +92,7 @@ if(NSW_BUILD_DOC)
 			COMMENT "Generating Doxygen documentation."
 			VERBATIM)
 
-		install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/doc/html/"
+		install(DIRECTORY "${CMAKE_BINARY_DIR}/doc/html/"
 			DESTINATION
 				"doc"
 			COMPONENT
@@ -183,12 +183,12 @@ install(FILES "CHANGELOG.md"
 
 include(CMakePackageConfigHelpers)
 
-write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/NostraSocketWrapperConfigVersion.cmake"
+write_basic_package_version_file("${CMAKE_BINARY_DIR}/NostraSocketWrapperConfigVersion.cmake"
 	VERSION "${PROJECT_VERSION}"
 	COMPATIBILITY AnyNewerVersion)
 
 export(EXPORT NostraSocketWrapperTargets
-	FILE "${CMAKE_CURRENT_BINARY_DIR}/NostraSocketWrapperTargets.cmake"
+	FILE "${CMAKE_BINARY_DIR}/NostraSocketWrapperTargets.cmake"
 	NAMESPACE Nostra::)
 
 configure_file("cmake/NostraSocketWrapperConfig.cmake.in" "NostraSocketWrapperConfig.cmake" @ONLY)
@@ -207,7 +207,7 @@ install(EXPORT NostraSocketWrapperTargets
 
 install(
   FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/NostraSocketWrapperConfig.cmake"
+    "${CMAKE_BINARY_DIR}/NostraSocketWrapperConfig.cmake"
   DESTINATION
     ${CONFIG_PACKAGE_LOCATION}
   COMPONENT
