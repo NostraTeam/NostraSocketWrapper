@@ -250,15 +250,15 @@ extern "C"
         char padding[8];
     };
 
-    nsw_sockaddr_t *nsw_clear_sockaddr(nsw_sockaddr_t *sockaddr);
+    struct nsw_sockaddr_t *nsw_clear_sockaddr(struct nsw_sockaddr_t *sockaddr);
 
-    nsw_reterr_t nsw_connect(nsw_socket_t socket, const nsw_sockaddr_t *addr);
+    nsw_reterr_t nsw_connect(nsw_socket_t socket, const struct nsw_sockaddr_t *addr);
 
-    nsw_reterr_t nsw_bind(nsw_socket_t socket, const nsw_sockaddr_t *addr);
+    nsw_reterr_t nsw_bind(nsw_socket_t socket, const struct nsw_sockaddr_t *addr);
 
     nsw_reterr_t nsw_listen(nsw_socket_t socket, int backlog);
 
-    nsw_socket_t nsw_accept(nsw_socket_t socket, nsw_sockaddr_t *addr);
+    nsw_socket_t nsw_accept(nsw_socket_t socket, struct nsw_sockaddr_t *addr);
 
     nsw_ssize_t nsw_send(nsw_socket_t socket, const void *data, size_t len, unsigned int flags);
 

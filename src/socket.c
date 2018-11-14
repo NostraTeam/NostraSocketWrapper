@@ -65,18 +65,19 @@ extern "C"
         return ret;
     }
 
-    nsw_sockaddr_t *nsw_clear_sockaddr(nsw_sockaddr_t *sockaddr)
+    struct nsw_sockaddr_t *nsw_clear_sockaddr(struct nsw_sockaddr_t *sockaddr)
     {
-        memset(sockaddr, 0, sizeof(nsw_sockaddr_t));
+        memset(sockaddr, 0, sizeof(struct nsw_sockaddr_t));
+        return sockaddr;
     }
 
-    nsw_reterr_t nsw_connect(nsw_socket_t socket, const nsw_sockaddr_t *addr)
+    nsw_reterr_t nsw_connect(nsw_socket_t socket, const struct nsw_sockaddr_t *addr)
     {
 #ifdef NSW_RESTORE_ERRNO
         errno_t oldErrno = errno;
 #endif
 
-        int err = connect(socket, (sockaddr *)addr, sizeof(nsw_sockaddr_t));
+        int err = connect(socket, (struct sockaddr *)addr, sizeof(struct nsw_sockaddr_t));
 
         if(err == -1)
         {
@@ -101,13 +102,13 @@ extern "C"
         return 0;
     }
 
-    nsw_reterr_t nsw_bind(nsw_socket_t socket, const nsw_sockaddr_t *addr)
+    nsw_reterr_t nsw_bind(nsw_socket_t socket, const struct nsw_sockaddr_t *addr)
     {
 #ifdef NSW_RESTORE_ERRNO
         errno_t oldErrno = errno;
 #endif
 
-        int err = bind(socket, (sockaddr *)addr, sizeof(nsw_sockaddr_t));
+        int err = bind(socket, (struct sockaddr *)addr, sizeof(struct nsw_sockaddr_t));
 
         if(err == -1)
         {
@@ -163,14 +164,14 @@ extern "C"
         return 0;
     }
 
-    nsw_reterr_t nsw_accept(nsw_socket_t socket, const nsw_sockaddr_t *addr)
+    nsw_reterr_t nsw_accept(nsw_socket_t socket, struct nsw_sockaddr_t *addr)
     {
 #ifdef NSW_RESTORE_ERRNO
         errno_t oldErrno = errno;
 #endif
 
-        socklen_t len = sizeof(nsw_sockaddr_t);
-        int err       = accept(socket, (sockaddr *)addr, &len);
+        socklen_t len = sizeof(struct nsw_sockaddr_t);
+        int err       = accept(socket, (struct sockaddr *)addr, &len);
 
         if(err == -1)
         {
@@ -223,7 +224,7 @@ extern "C"
             return -1;
         }
 
-        return 0;
+        return err;
     }
 
     nsw_ssize_t nsw_recv(nsw_socket_t socket, void *data, size_t len, unsigned int flags)
@@ -254,7 +255,7 @@ extern "C"
             return -1;
         }
 
-        return 0;
+        return err;
     }
 
     nsw_reterr_t nsw_close(nsw_socket_t socket)

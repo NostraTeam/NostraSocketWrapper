@@ -43,7 +43,7 @@ else()
 endif()
 
 if(NSW_RESTORE_ERRNO)
-	target_compile_definitions()(NostraSocketWrapper
+	target_compile_definitions(NostraSocketWrapper
 		PRIVATE
 			"NSW_RESTORE_ERRNO")
 endif()
