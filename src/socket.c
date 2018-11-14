@@ -78,7 +78,7 @@ extern "C"
                 case EBADF:
                     nsw_setError(NSW_ERR_INVALID_PARAMETER);
                     break;
-                case EIO:
+                case EIO: //it is not documented when this occurs
                     nsw_setError(NSW_ERR_UNKNOWN);
                     break;
                 default:
