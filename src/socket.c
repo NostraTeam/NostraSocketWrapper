@@ -9,6 +9,8 @@
 #    include <netinet/in.h>
 #    include <sys/stat.h>
 #    include <unistd.h>
+#elif defined(NSW_WIN32)
+#    include <winsock2.h>
 #endif
 
 #include <string.h>
@@ -20,14 +22,22 @@ extern "C"
 
     nsw_reterr_t nsw_initialize(void)
     {
+#ifdef NSW_POSIX
         // NO-OP on Unix
         return 0;
+#elif defined(NSW_WIN32)
+
+#endif
     }
 
     nsw_reterr_t nsw_terminate(void)
     {
+#ifdef NSW_POSIX
         // NO-OP on Unix
         return 0;
+#elif defined(NSW_WIN32)
+
+#endif
     }
 
     nsw_socket_t nsw_socket(nsw_address_family_t af, nsw_socket_type_t type, nsw_socket_protocol_t protocol)

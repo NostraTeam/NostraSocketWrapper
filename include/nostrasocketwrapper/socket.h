@@ -50,7 +50,11 @@ An example that demonstrates the usage of the functionality provided by the sock
 #    define NSW_SOCK_STREAM SOCK_STREAM
 #    define NSW_SOCK_DGRAM SOCK_DGRAM
 #elif NSW_WINSOCK
-#    error "e"
+#    define NSW_AF_INET AF_INET
+#    define NSW_AF_INET6 AF_INET6
+
+#    define NSW_SOCK_STREAM SOCK_STREAM
+#    define NSW_SOCK_DGRAM SOCK_DGRAM
 #elif _DOXYGEN_
 
 // Empty definitions for Doxygen; only these need to be documented
@@ -94,6 +98,7 @@ The socket type for communication using UDP.
 \since   1.0.0.0
 */
 #    define NSW_SOCK_DGRAM
+
 #endif
 
 #ifdef __cplusplus
