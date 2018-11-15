@@ -3,7 +3,6 @@ os:
   - linux
 
 language: 
-  - c
   - cpp
 
 compiler:
@@ -11,55 +10,17 @@ compiler:
   - gcc
 
 env:
-  - C_STANDARD="-std=c99" && BUILD_SHARED=ON
-  - C_STANDARD="-std=c99" && BUILD_SHARED=OFF
-  - C_STANDARD="-std=c11" && BUILD_SHARED=ON
-  - C_STANDARD="-std=c11" && BUILD_SHARED=OFF
-  - CXX_STANDARD="-std=c++98" && BUILD_SHARED=ON
-  - CXX_STANDARD="-std=c++98" && BUILD_SHARED=OFF
-  - CXX_STANDARD="-std=c++03" && BUILD_SHARED=ON
-  - CXX_STANDARD="-std=c++03" && BUILD_SHARED=OFF
-  - CXX_STANDARD="-std=c++11" && BUILD_SHARED=ON
-  - CXX_STANDARD="-std=c++11" && BUILD_SHARED=OFF
+  - BUILD_SHARED=ON
+  - BUILD_SHARED=OFF
 
 script:
   - mkdir build
   - cd build
-  - cmake -DNSW_BUILD_SHARED=$BUILD_SHARED -DNSW_BUILD_DOC=OFF -DNSW_BUILD_EXAMPLES=OFF ..
-  - cmake --build . -- -j2 $C_STANDARD $CXX_STANDARD
+  - cmake -DNSW_BUILD_SHARED=$BUILD_SHARED -DNSW_BUILD_DOC=OFF -DNSW_BUILD_EXAMPLES=OFF -DBUILD_TESTING=ON ..
+  - cmake --build . -- -j2
   - ctest
 
 matrix:
   exclude:
   - os: osx
     compiler: gcc
-
-  - language: c
-    env: CXX_STANDARD="-std=c++98" && BUILD_SHARED=ON
-
-  - language: c
-    env: CXX_STANDARD="-std=c++98" && BUILD_SHARED=OFF
-
-  - language: c
-    env: CXX_STANDARD="-std=c++03" && BUILD_SHARED=ON
-
-  - language: c
-    env: CXX_STANDARD="-std=c++03" && BUILD_SHARED=OFF
-
-  - language: c
-    env: CXX_STANDARD="-std=c++11" && BUILD_SHARED=ON
-  
-  - language: c
-    env: CXX_STANDARD="-std=c++11" && BUILD_SHARED=OFF
-  
-  - language: cpp
-    env: C_STANDARD="-std=c99" && BUILD_SHARED=ON
-
-  - language: cpp
-    env: C_STANDARD="-std=c99" && BUILD_SHARED=OFF
-
-  - language: cpp
-    env: C_STANDARD="-std=c11" && BUILD_SHARED=ON
-
-  - language: cpp
-    env: C_STANDARD="-std=c11" && BUILD_SHARED=OFF

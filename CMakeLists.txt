@@ -8,7 +8,7 @@ option(NSW_RESTORE_ERRNO  "If enabled, functions from this library will never af
 project(NostraSocketWrapper
 	VERSION 1.0.0.0
 	DESCRIPTION "A C wrapper for POSIX and Windows sockets."
-	LANGUAGES C CXX)
+	LANGUAGES C)
 	
 include(CTest)
 
@@ -23,6 +23,10 @@ else()
 endif()
 
 add_library(Nostra::SocketWrapper ALIAS NostraSocketWrapper)
+
+target_compile_features(NostraSocketWrapper 
+	PUBLIC
+		c_std_99)
 
 target_include_directories(NostraSocketWrapper
 	PUBLIC
