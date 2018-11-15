@@ -4,11 +4,18 @@ option(NSW_BUILD_SHARED   "If enabled, the library will be build as a shared lib
 option(NSW_BUILD_DOC      "If enabled, and Doxygen is installed, the documentation will be built." ON)
 option(NSW_BUILD_EXAMPLES "If enabled, the examples that come with the library will be build." ON)
 option(NSW_RESTORE_ERRNO  "If enabled, functions from this library will never affect errno/GetLastError()." OFF)
+option(NSW_USE_CPP        "If enabled, the C++ tests will be compiled as well." ON)
+
+set(NSW_LANGUAGES "C")
+
+if(NSW_USE_CPP)
+	list(APPEND NSW_LANGUAGES "CXX")
+endif()
 
 project(NostraSocketWrapper
 	VERSION 1.0.0.0
 	DESCRIPTION "A C wrapper for POSIX and Windows sockets."
-	LANGUAGES C CXX)
+	LANGUAGES ${NSW_LANGUAGES})
 	
 include(CTest)
 
@@ -127,6 +134,10 @@ function(nsw_add_cpp_test TEST_NAME)
 	
 	target_link_libraries("nsw.cpp.${TEST_NAME}" Nostra::SocketWrapper)
 
+	target_compile_features(NostraSocketWrapper 
+		PUBLIC
+			cxx_std_17)
+
 	install(TARGETS "nsw.cpp.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 
 			DESTINATION "test"
@@ -144,6 +155,10 @@ function(nsw_add_c_test TEST_NAME)
 	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.c")
 	
 	target_link_libraries("nsw.c.${TEST_NAME}" Nostra::SocketWrapper)
+
+	target_compile_features(NostraSocketWrapper 
+		PUBLIC
+			c_std_99)
 
 	install(TARGETS "nsw.c.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 
@@ -163,7 +178,10 @@ enable_testing()
 if(BUILD_TESTING)
 	nsw_add_c_test(socket.wt)
 	nsw_add_c_test(error.wt)
-	nsw_add_cpp_test(error.wt)
+
+	if(NSW_USE_CPP)
+		nsw_add_cpp_test(error.wt)
+	endif()
 endif()
 # Tests end
 
