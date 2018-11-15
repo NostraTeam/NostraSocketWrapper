@@ -122,29 +122,48 @@ else()
 endif()
 
 # Function for simpler addition of tests
-function(nsw_add_test TEST_NAME)
-	add_executable("nsw.${TEST_NAME}" "test/${TEST_NAME}.c")
+function(nsw_add_cpp_test TEST_NAME)
+	add_executable("nsw.cpp.${TEST_NAME}" "test/${TEST_NAME}.cpp")
 	
-	target_link_libraries("nsw.${TEST_NAME}" Nostra::SocketWrapper)
+	target_link_libraries("nsw.cpp.${TEST_NAME}" Nostra::SocketWrapper)
 
-	install(TARGETS "nsw.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
+	install(TARGETS "nsw.cpp.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 
 			DESTINATION "test"
 			COMPONENT "Test")
 
 	add_test(
 		NAME 
-			"nsw.${TEST_NAME}"
+			"nsw.cpp.${TEST_NAME}"
 		COMMAND 
-			"nsw.${TEST_NAME}")
+			"nsw.cpp.${TEST_NAME}")
+endfunction()
+
+# Function for simpler addition of tests
+function(nsw_add_c_test TEST_NAME)
+	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.c")
+	
+	target_link_libraries("nsw.c.${TEST_NAME}" Nostra::SocketWrapper)
+
+	install(TARGETS "nsw.c.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
+		RUNTIME 
+			DESTINATION "test"
+			COMPONENT "Test")
+
+	add_test(
+		NAME 
+			"nsw.c.${TEST_NAME}"
+		COMMAND 
+			"nsw.c.${TEST_NAME}")
 endfunction()
 
 enable_testing()
 
 # Tests start
 if(BUILD_TESTING)
-	nsw_add_test(socket.wt)
-	nsw_add_test(error.wt)
+	nsw_add_c_test(socket.wt)
+	nsw_add_c_test(error.wt)
+	nsw_add_cpp_test(error.wt)
 endif()
 # Tests end
 
