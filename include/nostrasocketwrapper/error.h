@@ -67,7 +67,11 @@ An example that demonstrates the usage of the functionality provided by the erro
 #    include "nostrasocketwrapper/platdect.h"
 #endif
 
-#include <errno.h>
+#ifdef NSW_POSIX
+#    include <errno.h>
+#elif defined(NSW_WINSOCK)
+#    include <WinSock2.h> ///\todo remove this include
+#endif
 
 #define NSW_ESUCCESS 0
 //#define NSW_ESUCCESS_NAME "NSW_ESUCCESS"
@@ -84,7 +88,6 @@ An example that demonstrates the usage of the functionality provided by the erro
 #    define NSW_EAFNOSUPPORT EAFNOSUPPORT
 #    define NSW_EAGAIN EAGAIN
 #    define NSW_EALREADY EALREADY
-#    define NSW_EBADF EBADF
 #    define NSW_EBADF EBADF
 #    define NSW_ECONNABORTED ECONNABORTED
 #    define NSW_ECONNREFUSED ECONNREFUSED
@@ -116,6 +119,60 @@ An example that demonstrates the usage of the functionality provided by the erro
 #    define NSW_EROFS EROFS
 #    define NSW_ETIMEDOUT ETIMEDOUT
 #    define NSW_EWOULDBLOCK EWOULDBLOCK
+#    define NSW_ESYSNOTREADY -1
+#    define NSW_EVERNOTSUPPORTED -2
+#    define NSW_EINPROGRESS -3
+#    define NSW_ENNOTINITIALIZED -4
+#    define NSW_ENETDOWN -5
+#elif defined(NSW_WINSOCK)
+#    define NSW_EACCES WSAEACCES
+#    define NSW_EADDRINUSE WSAEADDRINUSE
+#    define NSW_EADDRNOTAVAIL WSAEADDRNOTAVAIL
+#    define NSW_EAFNOSUPPORT WSAEAFNOSUPPORT
+#    define NSW_EAGAIN -1
+#    define NSW_EALREADY WSAEALREADY
+#    define NSW_EBADF WSAEBADF
+#    define NSW_ECONNABORTED WSAECONNABORTED
+#    define NSW_ECONNREFUSED WSAECONNREFUSED
+#    define NSW_ECONNRESET WSAECONNRESET
+#    define NSW_EDESTADDRREQ WSAEDESTADDRREQ
+#    define NSW_EFAULT WSAEFAULT
+#    define NSW_EINPROGRESS WSAEINPROGRESS
+#    define NSW_EINTR WSAEINTR
+#    define NSW_EINVAL WSAEINVAL
+#    define NSW_EISCONN WSAEISCONN
+#    define NSW_ELOOP WSAELOOP
+#    define NSW_EMFILE WSAEMFILE
+#    define NSW_EMSGSIZE WSAEMSGSIZE
+#    define NSW_ENAMETOOLONG WSAENAMETOOLONG
+#    define NSW_ENETUNREACH WSAENETUNREACH
+#    define NSW_ENFILE -2
+#    define NSW_ENOBUFS WSAENOBUFS
+#    define NSW_ENOENT -3
+#    define NSW_ENOMEM -4
+#    define NSW_ENOTCONN WSAENOTCONN
+#    define NSW_ENOTDIR -5
+#    define NSW_ENOTSOCK WSAENOTSOCK
+#    define NSW_EOPNOTSUPP WSAEOPNOTSUPP
+#    define NSW_EPERM -6
+#    define NSW_EPIPE -7
+#    define NSW_EPROTO -8
+#    define NSW_EPROTONOSUPPORT -9
+#    define NSW_EPROTOTYPE WSAEPROTOTYPE
+#    define NSW_EROFS -10
+#    define NSW_ETIMEDOUT WSAETIMEDOUT
+#    define NSW_EWOULDBLOCK WSAEWOULDBLOCK
+#    define NSW_ESYSNOTREADY WSASYSNOTREADY
+#    define NSW_EVERNOTSUPPORTED WSAVERNOTSUPPORTED
+#    define NSW_EPROCLIM WSAEPROCLIM
+#    define NSW_ENNOTINITIALIZED WSANOTINITIALISED
+#    define NSW_ENETDOWN WSAENETDOWN
+#endif
+
+#ifdef NSW_POSIX
+#    define NSW_INTERNAL_SOCKET_ERROR -1
+#elif defined(NSW_WINSOCK)
+#    define NSW_INTERNAL_SOCKET_ERROR SOCKET_ERROR
 #endif
 
 #ifdef __cplusplus
@@ -180,6 +237,10 @@ extern "C"
     \since   1.0.0.0
     */
     extern void nsw_set_error(nsw_error_t error);
+
+    extern nsw_error_t nsw_internal_get_errno();
+
+    extern void nsw_internal_set_errno(nsw_error_t error);
 
     /* // <- WARNING: not a doxygen comment
     \param error

@@ -37,10 +37,12 @@ An example that demonstrates the usage of the functionality provided by the sock
 #    include "nostrasocketwrapper/error.h"
 #endif
 
+#include <stdbool.h>
+
 #ifdef NSW_POSIX
-#    include <stdbool.h>
 #    include <sys/socket.h>
 #    include <sys/types.h> //for old BSD
+#elif defined(NSW_WINSOCK)
 #endif
 
 #ifdef NSW_POSIX
@@ -49,12 +51,12 @@ An example that demonstrates the usage of the functionality provided by the sock
 
 #    define NSW_SOCK_STREAM SOCK_STREAM
 #    define NSW_SOCK_DGRAM SOCK_DGRAM
-#elif NSW_WINSOCK
-#    define NSW_AF_INET AF_INET
-#    define NSW_AF_INET6 AF_INET6
+#elif defined(NSW_WINSOCK)
+#    define NSW_AF_INET 2   // AF_INET
+#    define NSW_AF_INET6 23 // AF_INET6
 
-#    define NSW_SOCK_STREAM SOCK_STREAM
-#    define NSW_SOCK_DGRAM SOCK_DGRAM
+#    define NSW_SOCK_STREAM 1 // SOCK_STREAM
+#    define NSW_SOCK_DGRAM 2  // SOCK_DGRAM
 #elif _DOXYGEN_
 
 // Empty definitions for Doxygen; only these need to be documented
@@ -101,6 +103,12 @@ The socket type for communication using UDP.
 
 #endif
 
+#ifdef NSW_POSIX
+#    define NSW_INVALID_SOCKET -1
+#elif defined(NSW_WINSOCK)
+#    define NSW_INVALID_SOCKET 0
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -113,7 +121,11 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
+#ifdef NSW_POSIX
     typedef int nsw_socket_t;
+#elif defined(NSW_WINSOCK)
+typedef unsigned __int64 nsw_socket_t;
+#endif
 
     /**
     \brief
@@ -148,7 +160,11 @@ extern "C"
     */
     typedef int nsw_socket_protocol_t;
 
+#ifdef NSW_POSIX
     typedef ssize_t nsw_ssize_t;
+#elif defined(NSW_WINSOCK)
+typedef int nsw_ssize_t;
+#endif
 
     typedef struct sockaddr_in nsw_sockaddr_t;
 

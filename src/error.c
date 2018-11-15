@@ -1,6 +1,10 @@
 #include "nostrasocketwrapper/error.h"
 
-#define NSW_INTERNAL_THREAD_LOCAL __thread
+#ifdef NSW_POSIX
+#    define NSW_INTERNAL_THREAD_LOCAL __thread
+#elif defined(NSW_WINSOCK)
+#    define NSW_INTERNAL_THREAD_LOCAL __declspec(thread)
+#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -20,6 +24,24 @@ extern "C"
     inline void nsw_set_error(nsw_error_t error)
     {
         nsw_internal_error = error;
+    }
+
+    inline nsw_error_t nsw_internal_get_errno()
+    {
+#ifdef NSW_POSIX
+        return errno;
+#elif defined(NSW_WINSOCK)
+    return WSAGetLastError();
+#endif
+    }
+
+    inline void nsw_internal_set_errno(nsw_error_t error)
+    {
+#ifdef NSW_POSIX
+        errno = error;
+#elif defined(NSW_WINSOCK)
+        WSASetLastError(error);
+#endif
     }
 
 /*

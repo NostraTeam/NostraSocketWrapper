@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8.2 FATAL_ERROR)
 option(NSW_BUILD_SHARED   "If enabled, the library will be build as a shared library." OFF)
 option(NSW_BUILD_DOC      "If enabled, and Doxygen is installed, the documentation will be built." ON)
 option(NSW_BUILD_EXAMPLES "If enabled, the examples that come with the library will be build." ON)
-option(NSW_RESTORE_ERRNO  "If enabled, functions from this library will never affect errno/GetLastError()." OFF)
+option(NSW_RESTORE_ERRNO  "If enabled, functions from this library will never affect errno/WSAGetLastError()." OFF)
 option(NSW_USE_CPP        "If enabled, the C++ tests will be compiled as well." ON)
 
 set(NSW_LANGUAGES "C")
@@ -31,10 +31,6 @@ endif()
 
 add_library(Nostra::SocketWrapper ALIAS NostraSocketWrapper)
 
-target_compile_features(NostraSocketWrapper 
-	PUBLIC
-		c_std_99)
-
 target_include_directories(NostraSocketWrapper
 	PUBLIC
 		"$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
@@ -45,6 +41,10 @@ if(MSVC)
 	target_compile_options(NostraSocketWrapper
 		PRIVATE
 			"/wd4251")
+
+    target_link_libraries(NostraSocketWrapper 
+        PRIVATE 
+            Ws2_32)
 else()
 	target_compile_options(NostraSocketWrapper
 		PRIVATE
@@ -155,10 +155,6 @@ function(nsw_add_c_test TEST_NAME)
 	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.c")
 	
 	target_link_libraries("nsw.c.${TEST_NAME}" Nostra::SocketWrapper)
-
-	target_compile_features(NostraSocketWrapper 
-		PUBLIC
-			c_std_99)
 
 	install(TARGETS "nsw.c.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 

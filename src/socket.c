@@ -9,7 +9,7 @@
 #    include <netinet/in.h>
 #    include <sys/stat.h>
 #    include <unistd.h>
-#elif defined(NSW_WIN32)
+#elif defined(NSW_WINSOCK)
 #    include <winsock2.h>
 #endif
 
@@ -25,8 +25,19 @@ extern "C"
 #ifdef NSW_POSIX
         // NO-OP on Unix
         return 0;
-#elif defined(NSW_WIN32)
+#elif defined(NSW_WINSOCK)
+    WSADATA wsdata;
 
+    int result = WSAStartup(MAKEWORD(2, 2), &wsdata);
+
+    if(result != 0)
+    {
+        nsw_set_error(result);
+
+        return -1;
+    }
+    else
+        return 0;
 #endif
     }
 
@@ -35,7 +46,17 @@ extern "C"
 #ifdef NSW_POSIX
         // NO-OP on Unix
         return 0;
-#elif defined(NSW_WIN32)
+#elif defined(NSW_WINSOCK)
+
+    int err = WSACleanup();
+
+    if(err == NSW_INTERNAL_SOCKET_ERROR)
+    {
+        nsw_set_error(nsw_internal_get_errno());
+        return -1;
+    }
+    else
+        return 0;
 
 #endif
     }
@@ -43,20 +64,20 @@ extern "C"
     nsw_socket_t nsw_socket(nsw_address_family_t af, nsw_socket_type_t type, nsw_socket_protocol_t protocol)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
         nsw_socket_t ret = (nsw_socket_t)socket(af, type, protocol);
 
-        if(ret == -1) // error
+        if(ret == NSW_INVALID_SOCKET) // error
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
-            return -1;
+            return NSW_INVALID_SOCKET;
         }
         return ret;
     }
@@ -70,17 +91,17 @@ extern "C"
     nsw_reterr_t nsw_connect(nsw_socket_t socket, const nsw_sockaddr_t *addr)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
         int err = connect(socket, (struct sockaddr *)addr, sizeof(nsw_sockaddr_t));
 
-        if(err == -1)
+        if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
             return -1;
@@ -92,17 +113,17 @@ extern "C"
     nsw_reterr_t nsw_bind(nsw_socket_t socket, const nsw_sockaddr_t *addr)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
         int err = bind(socket, (struct sockaddr *)addr, sizeof(nsw_sockaddr_t));
 
-        if(err == -1)
+        if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
             return -1;
@@ -114,17 +135,17 @@ extern "C"
     nsw_reterr_t nsw_listen(nsw_socket_t socket, int backlog)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
         int err = listen(socket, backlog);
 
-        if(err == -1)
+        if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
             return -1;
@@ -133,43 +154,55 @@ extern "C"
         return 0;
     }
 
-    nsw_reterr_t nsw_accept(nsw_socket_t socket, nsw_sockaddr_t *addr)
+    nsw_socket_t nsw_accept(nsw_socket_t socket, nsw_sockaddr_t *addr)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
-        socklen_t len = sizeof(nsw_sockaddr_t);
-        int err       = accept(socket, (struct sockaddr *)addr, &len);
+#ifdef NSW_POSIX
+        typedef socklen_t nsw_locl_socklen_t;
+#elif defined(NSW_WINSOCK)
+    typedef int nsw_locl_socklen_t;
+#endif
 
-        if(err == -1)
+        nsw_locl_socklen_t len = sizeof(nsw_sockaddr_t);
+        nsw_socket_t ret       = accept(socket, (struct sockaddr *)addr, &len);
+
+        if(ret == NSW_INVALID_SOCKET)
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
-            return -1;
+            return NSW_INVALID_SOCKET;
         }
 
-        return 0;
+        return ret;
     }
 
     nsw_ssize_t nsw_send(nsw_socket_t socket, const void *data, size_t len, unsigned int flags)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
-        int err = send(socket, data, len, flags);
+#ifdef NSW_POSIX
+        typedef size_t nsw_local_lenght_type;
+#elif defined(NSW_WINSOCK)
+    typedef int nsw_local_lenght_type;
+#endif
 
-        if(err == -1)
+        int err = send(socket, data, (nsw_local_lenght_type)len, flags);
+
+        if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
             return -1;
@@ -181,17 +214,23 @@ extern "C"
     nsw_ssize_t nsw_recv(nsw_socket_t socket, void *data, size_t len, unsigned int flags)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
-        int err = recv(socket, data, len, flags);
+#ifdef NSW_POSIX
+        typedef size_t nsw_local_lenght_type;
+#elif defined(NSW_WINSOCK)
+    typedef int nsw_local_lenght_type;
+#endif
 
-        if(err == -1)
+        int err = recv(socket, data, (nsw_local_lenght_type)len, flags);
+
+        if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
             return -1;
@@ -203,17 +242,21 @@ extern "C"
     nsw_reterr_t nsw_close(nsw_socket_t socket)
     {
 #ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
+        errno_t oldErrno = nsw_internal_get_errno();
 #endif
 
+#ifdef NSW_POSIX
         int err = close(socket);
+#elif defined(NSW_WINSOCK)
+    int err = closesocket(socket);
+#endif
 
-        if(err == -1)
+        if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(errno);
+            nsw_set_error(nsw_internal_get_errno());
 
 #ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
+            nsw_internal_set_errno(oldErrno);
 #endif
 
             return -1;
@@ -224,22 +267,26 @@ extern "C"
 
     bool nsw_is_socket(nsw_socket_t socket)
     {
-#ifdef NSW_RESTORE_ERRNO
-        errno_t oldErrno = errno;
-#endif
+#ifdef NSW_POSIX
+#    ifdef NSW_RESTORE_ERRNO
+        errno_t oldErrno = nsw_internal_get_errno();
+#    endif
 
         struct stat statbuf;
         int err = fstat(socket, &statbuf);
 
-        if(err == -1)
+        if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-#ifdef NSW_RESTORE_ERRNO
-            errno = oldErrno;
-#endif
+#    ifdef NSW_RESTORE_ERRNO
+            nsw_internal_get_errno() = oldErrno;
+#    endif
             return false;
         }
 
         return (bool)(S_ISSOCK(statbuf.st_mode) != 0);
+#elif defined(NSW_WINSOCK)
+    return false;
+#endif
     }
 
 #ifdef __cplusplus
