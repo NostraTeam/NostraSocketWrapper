@@ -12,7 +12,7 @@
 A component that provides the error handling system of NSW.
 
 \details
-None of the error codes (the macros \ilc{NSW_ERR_*}) in this component are documented, because they may have
+None of the error codes (the macros \ilc{NSW_E*}) in this component are documented, because they may have
 slightly different meanings in different contexts. However, the functions in which the errors are set will
 have information on when certain errors will be set.
 
@@ -32,7 +32,7 @@ Additionally, each error code consists of three parts:
         </td>
         <td>
             The name macro holds the name of the code macro as a string. E.g.: The name macro if
-            \ilc{NSW_ERR_SUCCESS} expands to \ilc{"NSW_ERR_SUCCESS"}. These are used by nsw_errorName().
+            \ilc{NSW_ESUCCESS} expands to \ilc{"NSW_ESUCCESS"}. These are used by nsw_errorName().
         </td>
     </tr>
     <tr>
@@ -63,46 +63,60 @@ An example that demonstrates the usage of the functionality provided by the erro
 #    include "nostrasocketwrapper/export.h"
 #endif
 
-#define NSW_ERR_SUCCESS 0
-#define NSW_ERR_SUCCESS_NAME "NSW_ERR_SUCCESS"
-#define NSW_ERR_SUCCESS_TEXT "No error happened."
+#ifndef NSW_PLATDECT_H
+#    include "nostrasocketwrapper/platdect.h"
+#endif
 
-#define NSW_ERR_UNKNOWN 1
-#define NSW_ERR_UNKNOWN_NAME "NSW_ERR_UNKNOWN"
-#define NSW_ERR_UNKNOWN_TEXT "An unknown error happened."
+#include <errno.h>
 
-#define NSW_ERR_INVALID_PARAMETER 2
-#define NSW_ERR_INVALID_PARAMETER_NAME "NSW_ERR_INVALID_PARAMETER"
-#define NSW_ERR_INVALID_PARAMETER_TEXT "An invalid parameter was passed to a function."
+#define NSW_ESUCCESS 0
+//#define NSW_ESUCCESS_NAME "NSW_ESUCCESS"
+//#define NSW_ESUCCESS_TEXT "No error happened."
 
-#define NSW_ERR_ACCESS_DENIED 3
-#define NSW_ERR_ACCESS_DENIED_NAME "NSW_ERR_ACCESS_DENIED"
-#define NSW_ERR_ACCESS_DENIED_TEXT "The access to a resource was denied by the operating system."
+#define NSW_EUNKNOWN -1
+//#define NSW_EUNKNOWN_NAME "NSW_EUNKNOWN"
+//#define NSW_EUNKNOWN_TEXT "An unknown error happened."
 
-#define NSW_ERR_FAMILY_NOT_SUPPORTED 4
-#define NSW_ERR_FAMILY_NOT_SUPPORTED_NAME "NSW_ERR_FAMILY_NOT_SUPPORTED"
-#define NSW_ERR_FAMILY_NOT_SUPPORTED_TEXT "The system does not support the provided protocol family."
-
-#define NSW_ERR_TOO_MANY_PROCESS_FILES 5
-#define NSW_ERR_TOO_MANY_PROCESS_FILES_NAME "NSW_ERR_TOO_MANY_PROCESS_FILES"
-#define NSW_ERR_TOO_MANY_PROCESS_FILES_TEXT "The process has too many opened files."
-
-#define NSW_ERR_TOO_MANY_SYSTEM_FILES 6
-#define NSW_ERR_TOO_MANY_SYSTEM_FILES_NAME "NSW_ERR_TOO_MANY_SYSTEM_FILES"
-#define NSW_ERR_TOO_MANY_SYSTEM_FILES_TEXT "The operating system has too many opened files."
-
-#define NSW_OUT_OF_MEMORY 7
-#define NSW_OUT_OF_MEMORY_NAME "NSW_OUT_OF_MEMORY"
-#define NSW_OUT_OF_MEMORY_TEXT "The process has run out of memory."
-
-#define NSW_ERR_UNSUPPORTED_PROTOCOL 8
-#define NSW_ERR_UNSUPPORTED_PROTOCOL_NAME "NSW_ERR_UNSUPPORTED_PROTOCOL"
-#define NSW_ERR_UNSUPPORTED_PROTOCOL_TEXT "A network protocol or protocol type is not supported."
-
-#define NSW_INTERNAL_ERR_UNKNOWN_ERROR_CODE_NAME "<the code passed to nsw_errorName() was invalid>"
-#define NSW_INTERNAL_ERR_UNKNOWN_ERROR_CODE_TEXT "<the code passed to nsw_errorText() was invalid>"
-
-#define NSW_INTERNAL_THREAD_LOCAL __thread
+#ifdef NSW_POSIX
+#    define NSW_EACCES EACCES
+#    define NSW_EADDRINUSE EADDRINUSE
+#    define NSW_EADDRNOTAVAIL EADDRNOTAVAIL
+#    define NSW_EAFNOSUPPORT EAFNOSUPPORT
+#    define NSW_EAGAIN EAGAIN
+#    define NSW_EALREADY EALREADY
+#    define NSW_EBADF EBADF
+#    define NSW_EBADF EBADF
+#    define NSW_ECONNABORTED ECONNABORTED
+#    define NSW_ECONNREFUSED ECONNREFUSED
+#    define NSW_ECONNRESET ECONNRESET
+#    define NSW_EDESTADDRREQ EDESTADDRREQ
+#    define NSW_EFAULT EFAULT
+#    define NSW_EINPROGRESS EINPROGRESS
+#    define NSW_EINTR EINTR
+#    define NSW_EINVAL EINVAL
+#    define NSW_EISCONN EISCONN
+#    define NSW_ELOOP ELOOP
+#    define NSW_EMFILE EMFILE
+#    define NSW_EMSGSIZE EMSGSIZE
+#    define NSW_ENAMETOOLONG ENAMETOOLONG
+#    define NSW_ENETUNREACH ENETUNREACH
+#    define NSW_ENFILE ENFILE
+#    define NSW_ENOBUFS ENOBUFS
+#    define NSW_ENOENT ENOENT
+#    define NSW_ENOMEM ENOMEM
+#    define NSW_ENOTCONN ENOTCONN
+#    define NSW_ENOTDIR ENOTDIR
+#    define NSW_ENOTSOCK ENOTSOCK
+#    define NSW_EOPNOTSUPP EOPNOTSUPP
+#    define NSW_EPERM EPERM
+#    define NSW_EPIPE EPIPE
+#    define NSW_EPROTO EPROTO
+#    define NSW_EPROTONOSUPPORT EPROTONOSUPPOR
+#    define NSW_EPROTOTYPE EPROTOTYPE
+#    define NSW_EROFS EROFS
+#    define NSW_ETIMEDOUT ETIMEDOUT
+#    define NSW_EWOULDBLOCK EWOULDBLOCK
+#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -138,23 +152,6 @@ extern "C"
     typedef int nsw_reterr_t;
 
     /**
-    \brief
-    Stores the current error code.
-
-    \details
-    Before an error code is set by a function, the error code will be initialized with \ilc{NSW_ERR_SUCCESS}.
-
-    \note
-    This variable is thread local.
-
-    \author  Lukas Reichmann
-    \version 1.0.0.0
-    \since   1.0.0.0
-    */
-    ///\todo perhaps remove NSW_EXPORT; should not be accessible from the outside
-    NSW_EXPORT extern NSW_INTERNAL_THREAD_LOCAL nsw_error_t nsw_internal_error;
-
-    /**
     \return
     The current error code.
 
@@ -169,10 +166,7 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    static inline nsw_error_t nsw_getError()
-    {
-        return nsw_internal_error;
-    }
+    extern nsw_error_t nsw_get_error();
 
     /**
     \param error
@@ -185,12 +179,9 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    static inline void nsw_setError(nsw_error_t error)
-    {
-        nsw_internal_error = error;
-    }
+    extern void nsw_set_error(nsw_error_t error);
 
-    /**
+    /* // <- WARNING: not a doxygen comment
     \param error
     The error code to get the name of.
 
@@ -201,9 +192,9 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    NSW_EXPORT const char *nsw_errorName(nsw_error_t error);
+    // NSW_EXPORT const char *nsw_errorName(nsw_error_t error);
 
-    /**
+    /* // <- WARNING: not a doxygen comment
     \param error
     The error code to get the description text of.
 
@@ -214,7 +205,7 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    NSW_EXPORT const char *nsw_errorText(nsw_error_t error);
+    // NSW_EXPORT const char *nsw_errorText(nsw_error_t error);
 
 #ifdef __cplusplus
 }

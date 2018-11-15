@@ -1,11 +1,28 @@
 #include "nostrasocketwrapper/error.h"
 
+#define NSW_INTERNAL_THREAD_LOCAL __thread
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-    NSW_INTERNAL_THREAD_LOCAL nsw_error_t nsw_internal_error = NSW_ERR_SUCCESS;
 
+    /*
+    The variable that stores the current error code per thread.
+    */
+    NSW_INTERNAL_THREAD_LOCAL nsw_error_t nsw_internal_error = NSW_ESUCCESS;
+
+    inline nsw_error_t nsw_get_error()
+    {
+        return nsw_internal_error;
+    }
+
+    inline void nsw_set_error(nsw_error_t error)
+    {
+        nsw_internal_error = error;
+    }
+
+/*
     const char *nsw_errorName(nsw_error_t error)
     {
         switch(error)
@@ -38,7 +55,7 @@ extern "C"
                 return NSW_ERR_UNSUPPORTED_PROTOCOL_NAME;
 
             default:
-                nsw_setError(NSW_ERR_INVALID_PARAMETER);
+                nsw_set_error(NSW_ERR_INVALID_PARAMETER);
                 return NSW_INTERNAL_ERR_UNKNOWN_ERROR_CODE_NAME;
         }
     }
@@ -75,11 +92,11 @@ extern "C"
                 return NSW_ERR_UNSUPPORTED_PROTOCOL_TEXT;
 
             default:
-                nsw_setError(NSW_ERR_INVALID_PARAMETER);
+                nsw_set_error(NSW_ERR_INVALID_PARAMETER);
                 return NSW_INTERNAL_ERR_UNKNOWN_ERROR_CODE_TEXT;
         }
     }
-
+*/
 #ifdef __cplusplus
 }
 #endif

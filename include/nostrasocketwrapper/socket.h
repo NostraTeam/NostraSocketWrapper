@@ -145,6 +145,8 @@ extern "C"
 
     typedef ssize_t nsw_ssize_t;
 
+    typedef struct sockaddr_in nsw_sockaddr_t;
+
     /**
     \param af
     The socket family. The passed value must be &isin; {\ilc{NSW_AF_INET}, \ilc{NSW_AF_INET6}}.
@@ -242,27 +244,23 @@ extern "C"
                                        nsw_socket_type_t type,
                                        nsw_socket_protocol_t protocol);
 
-    struct nsw_sockaddr_t
-    {
-        short family;
-        unsigned short port;
-        unsigned long addr;
-        char padding[8];
-    };
+    nsw_sockaddr_t *nsw_clear_sockaddr(nsw_sockaddr_t *sockaddr);
 
-    struct nsw_sockaddr_t *nsw_clear_sockaddr(struct nsw_sockaddr_t *sockaddr);
+    nsw_reterr_t nsw_connect(nsw_socket_t socket, const nsw_sockaddr_t *addr);
 
-    nsw_reterr_t nsw_connect(nsw_socket_t socket, const struct nsw_sockaddr_t *addr);
-
-    nsw_reterr_t nsw_bind(nsw_socket_t socket, const struct nsw_sockaddr_t *addr);
+    nsw_reterr_t nsw_bind(nsw_socket_t socket, const nsw_sockaddr_t *addr);
 
     nsw_reterr_t nsw_listen(nsw_socket_t socket, int backlog);
 
-    nsw_socket_t nsw_accept(nsw_socket_t socket, struct nsw_sockaddr_t *addr);
+    nsw_socket_t nsw_accept(nsw_socket_t socket, nsw_sockaddr_t *addr);
 
     nsw_ssize_t nsw_send(nsw_socket_t socket, const void *data, size_t len, unsigned int flags);
 
     nsw_ssize_t nsw_recv(nsw_socket_t socket, void *data, size_t len, unsigned int flags);
+
+    nsw_reterr_t nsw_initialize();
+
+    nsw_reterr_t nsw_terminate();
 
     /**
     \param socket
@@ -317,11 +315,15 @@ extern "C"
     be assumed that this is beacause of problems with the socket. Hence, \ilc{false} will be returned in such
     case.
 
+    \note
+    If \ilc{NSW_RESTORE_ERRNO} is not defined, \ilc{errno}/\ilc{GetLastError()} may return an error, even if
+    \ilc{nsw_get_error()} does not.
+
     \author  Lukas Reichmann
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    NSW_EXPORT bool nsw_isSocket(nsw_socket_t socket); ///\todo Rename to nsw_is_socket()
+    NSW_EXPORT bool nsw_is_socket(nsw_socket_t socket); ///\todo Rename to nsw_is_socket()
 
 #ifdef __cplusplus
 }
