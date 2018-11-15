@@ -11,7 +11,7 @@ A test for the component socket.
 #include <stdio.h>
 #include <stdlib.h>
 
-void test_socket()
+void test_socket(void)
 {
     {
         // IPv4; TCP
@@ -98,7 +98,7 @@ void test_socket()
     }
 }
 
-void test_close()
+void test_close(void)
 {
     {
         nsw_socket_t sock = socket(NSW_AF_INET, NSW_SOCK_STREAM, 0);
@@ -135,7 +135,7 @@ void test_close()
     }
 }
 
-int main()
+int main(void)
 {
     test_socket();
     test_close();

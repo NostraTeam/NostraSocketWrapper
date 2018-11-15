@@ -11,7 +11,7 @@ A test for the component error.
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
+int main(void)
 {
     // check if properly initialized
     if(nsw_get_error() != NSW_ESUCCESS)

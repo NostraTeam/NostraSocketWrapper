@@ -18,6 +18,18 @@ extern "C"
 {
 #endif
 
+    nsw_reterr_t nsw_initialize(void)
+    {
+        // NO-OP on Unix
+        return 0;
+    }
+
+    nsw_reterr_t nsw_terminate(void)
+    {
+        // NO-OP on Unix
+        return 0;
+    }
+
     nsw_socket_t nsw_socket(nsw_address_family_t af, nsw_socket_type_t type, nsw_socket_protocol_t protocol)
     {
 #ifdef NSW_RESTORE_ERRNO

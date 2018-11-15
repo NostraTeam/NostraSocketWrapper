@@ -147,6 +147,10 @@ extern "C"
 
     typedef struct sockaddr_in nsw_sockaddr_t;
 
+    nsw_reterr_t nsw_initialize(void);
+
+    nsw_reterr_t nsw_terminate(void);
+
     /**
     \param af
     The socket family. The passed value must be &isin; {\ilc{NSW_AF_INET}, \ilc{NSW_AF_INET6}}.
@@ -257,10 +261,6 @@ extern "C"
     nsw_ssize_t nsw_send(nsw_socket_t socket, const void *data, size_t len, unsigned int flags);
 
     nsw_ssize_t nsw_recv(nsw_socket_t socket, void *data, size_t len, unsigned int flags);
-
-    nsw_reterr_t nsw_initialize();
-
-    nsw_reterr_t nsw_terminate();
 
     /**
     \param socket

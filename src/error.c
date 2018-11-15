@@ -12,7 +12,7 @@ extern "C"
     */
     NSW_INTERNAL_THREAD_LOCAL nsw_error_t nsw_internal_error = NSW_ESUCCESS;
 
-    inline nsw_error_t nsw_get_error()
+    inline nsw_error_t nsw_get_error(void)
     {
         return nsw_internal_error;
     }

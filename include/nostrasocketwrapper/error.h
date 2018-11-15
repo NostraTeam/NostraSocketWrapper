@@ -166,7 +166,7 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    extern nsw_error_t nsw_get_error();
+    extern nsw_error_t nsw_get_error(void);
 
     /**
     \param error
