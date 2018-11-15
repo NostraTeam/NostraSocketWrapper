@@ -136,7 +136,7 @@ function(nsw_add_cpp_test TEST_NAME)
 
 	target_compile_features(NostraSocketWrapper 
 		PUBLIC
-			cxx_std_17)
+			cxx_std_11)
 
 	install(TARGETS "nsw.cpp.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 
