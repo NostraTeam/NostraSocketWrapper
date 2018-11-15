@@ -51,7 +51,7 @@ An example that demonstrates the usage of the functionality provided by the plat
 
 // if no overrides are defined, detect platform
 #    if !defined(NSW_WINSOCK) && !defined(NSW_POSIX)
-#        if defined(__unix__)
+#        if defined(__unix__) || defined(__APPLE__)
 #            define NSW_POSIX
 #        elif defined _WIN32
 #            define NSW_WINSOCK
