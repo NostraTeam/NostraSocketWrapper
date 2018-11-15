@@ -139,7 +139,8 @@ enable_testing()
 
 # Tests start
 if(BUILD_TESTING)
-
+	nsw_add_test(socket.wt)
+	nsw_add_test(error.wt)
 endif()
 # Tests end
 
