@@ -8,7 +8,7 @@ option(NSW_RESTORE_ERRNO  "If enabled, functions from this library will never af
 project(NostraSocketWrapper
 	VERSION 1.0.0.0
 	DESCRIPTION "A C wrapper for POSIX and Windows sockets."
-	LANGUAGES C)
+	LANGUAGES C CXX)
 	
 include(CTest)
 
