@@ -188,4 +188,6 @@ int main(void)
         printf("Failed in line: %d\n", __LINE__);
         exit(__LINE__);
     }
+
+    return 0;
 }

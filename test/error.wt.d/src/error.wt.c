@@ -142,4 +142,6 @@ int main(void)
     }
 
     /**\todo add checks if the error code is actually thread local */
+
+    return 0;
 }
