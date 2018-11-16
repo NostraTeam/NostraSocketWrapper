@@ -1,0 +1,83 @@
+# This file is irrelevant for the build and will be removed in the future
+# The file describes what POSIX/Winsock errors map to which NSW error
+
+nsw_socket():
+    NSW_ENOTINITIALIZED     <- wsock:WSANOTINITIALISED
+    
+    EAFNOSUPPORT            <- wsock:WSAEAFNOSUPPORT
+                            <- posix:EAFNOSUPPORT
+
+    NSW_EPROTONOSUPPORT     <- wsock:WSAEAFNOSUPPORT
+                            <- wsock:EAFNOSUPPORT
+                            <- posix:EAFNOSUPPORT
+
+    NSW_ENOBUFS             <- wsock:WSAENOBUFS
+                            <- posix:ENOBUFS
+                            <- posix:ENOMEM
+
+    NSW_EMFILE              <- wsock:WSAEMFILE
+                            <- posix:EMFILE
+                            <- posix:ENFILE
+
+    NSW_EACCES              <- posix:EACCES
+
+    NSW_EINVAL              <- wsock:WSAEINVAL
+                            <- wsock:WSAESOCKTNOSUPPORT
+                            <- posix:EINVAL
+
+    NSW_ENETDOWN            <- wsock:WSAENETDOWN
+
+    NSW_EINPROGRESS         <- wsock:WSAEINPROGRESS
+
+    NSW_EINVALIDPROVIDER    <- wsock:WSAEINVALIDPROVIDER
+
+    NSW_EINVALIDPROCTABLE   <- wsock:WSAEINVALIDPROCTABLE
+
+    NSW_EPROVIDERFAILEDINIT <- wsock:WSAEPROVIDERFAILEDINIT
+
+nsw_listen()
+    NSW_ENOTINITIALIZED     <- wsock:WSANOTINITIALISED
+
+    NSW_ENETDOWN            <- wsock:WSAENETDOWN
+
+    NSW_EINPROGRESS         <- wsock:WSAEINPROGRESS
+
+    NSW_EADDRINUSE          <- wsock:WSAEADDRINUSE
+                            <- posix:EADDRINUSE
+    
+    NSW_ENOTSOCK            <- wsock:WSAENOTSOCK
+                            <- posix:ENOTSOCK
+                            <- posix:EBADF
+    
+    NSW_EOPNOTSUPP          <- wsock:WSAEOPNOTSUPP
+                            <- posix:EOPNOTSUPP
+    
+    NSW_EINVAL              <- wsock:WSAEINVAL
+    
+    NSW_EISCONN             <- wsock:WSAEISCONN
+
+    NSW_EMFILE              <- wsock:WSAEMFILE
+
+    NSW_ENOBUFS             <- wsock:WSAENOBUFS
+
+nsw_close()
+    NSW_ENOTINITIALIZED     <- wsock:WSANOTINITIALISED
+
+    NSW_ENETDOWN            <- wsock:WSAENETDOWN
+
+    NSW_EINPROGRESS         <- wsock:WSAEINPROGRESS
+
+    NSW_ENOTSOCK            <- wsock:WSAENOTSOCK
+                            <- posix:EBADF
+
+    NSW_EINTR               <- wsock:WSAEINTR
+                            <- posix:EINTR
+
+    NSW_EWOULDBLOCK         <- wsock:WSAEWOULDBLOCK
+
+    #Can be ignored, not socket related
+    NSW_EUNKNOWN            <- posix:ENOSPC
+                            <- posix:EDQUOT
+                            <- posix:EIO
+
+    

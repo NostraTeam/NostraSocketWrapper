@@ -71,7 +71,7 @@ extern "C"
 
         if(ret == NSW_INVALID_SOCKET)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_socket(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);
@@ -98,7 +98,7 @@ extern "C"
 
         if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_connect(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);
@@ -120,7 +120,7 @@ extern "C"
 
         if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_bind(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);
@@ -142,7 +142,7 @@ extern "C"
 
         if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_listen(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);
@@ -171,7 +171,7 @@ extern "C"
 
         if(ret == NSW_INVALID_SOCKET)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_accept(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);
@@ -199,7 +199,7 @@ extern "C"
 
         if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_send(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);
@@ -227,7 +227,7 @@ extern "C"
 
         if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_recv(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);
@@ -253,7 +253,7 @@ extern "C"
 
         if(err == NSW_INTERNAL_SOCKET_ERROR)
         {
-            nsw_set_error(nsw_internal_get_errno());
+            nsw_set_error(nsw_internal_map_error_close(nsw_internal_get_errno()));
 
 #ifdef NSW_RESTORE_ERRNO
             nsw_internal_set_errno(oldErrno);

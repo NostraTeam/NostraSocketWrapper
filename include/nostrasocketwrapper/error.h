@@ -73,14 +73,15 @@ An example that demonstrates the usage of the functionality provided by the erro
 #    include <WinSock2.h> /** \todo remove this include */
 #endif
 
-#define NSW_ESUCCESS 0
+/* #define NSW_ESUCCESS 0 */
 /*#define NSW_ESUCCESS_NAME "NSW_ESUCCESS" */
 /*#define NSW_ESUCCESS_TEXT "No error happened." */
 
-#define NSW_EUNKNOWN -1
+/* #define NSW_EUNKNOWN -1 */
 /* #define NSW_EUNKNOWN_NAME "NSW_EUNKNOWN" */
 /* #define NSW_EUNKNOWN_TEXT "An unknown error happened." */
 
+/*
 #ifdef NSW_POSIX
 #    define NSW_EACCES EACCES
 #    define NSW_EADDRINUSE EADDRINUSE
@@ -168,6 +169,7 @@ An example that demonstrates the usage of the functionality provided by the erro
 #    define NSW_ENNOTINITIALIZED WSANOTINITIALISED
 #    define NSW_ENETDOWN WSAENETDOWN
 #endif
+*/
 
 #ifdef NSW_POSIX
 #    define NSW_INTERNAL_SOCKET_ERROR -1
@@ -180,6 +182,28 @@ extern "C"
 {
 #endif
 
+    typedef enum
+    {
+        NSW_ESUCCESS,
+        NSW_EUNKNOWN,
+        NSW_ENOTINITIALIZED,
+        NSW_EAFNOSUPPORT,
+        NSW_EPROTONOSUPPORT,
+        NSW_ENOBUFS,
+        NSW_EMFILE,
+        NSW_EACCES,
+        NSW_EINVAL,
+        NSW_ENETDOWN,
+        NSW_EINPROGRESS,
+        NSW_EINVALIDPROVIDER,
+        NSW_EINVALIDPROCTABLE,
+        NSW_EPROVIDERFAILEDINIT,
+        NSW_ENOTSOCK,
+        NSW_EINTR,
+        NSW_EADDRINUSE,
+        NSW_EOPNOTSUPP
+    } nsw_error_t;
+
     /**
     \brief
     The type that is used for errors.
@@ -188,7 +212,9 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    typedef int nsw_error_t;
+    // typedef int nsw_error_t;
+
+    typedef int nsw_internal_errno_t;
 
     /**
     \brief
@@ -238,9 +264,18 @@ extern "C"
     */
     NSW_EXPORT extern void nsw_set_error(nsw_error_t error);
 
-    NSW_NO_EXPORT extern nsw_error_t nsw_internal_get_errno();
+    NSW_NO_EXPORT extern nsw_internal_errno_t nsw_internal_get_errno();
 
-    NSW_NO_EXPORT extern void nsw_internal_set_errno(nsw_error_t error);
+    NSW_NO_EXPORT extern void nsw_internal_set_errno(nsw_internal_errno_t error);
+
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_socket(nsw_internal_errno_t error);
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_connect(nsw_internal_errno_t error);
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_bind(nsw_internal_errno_t error);
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_listen(nsw_internal_errno_t error);
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_accept(nsw_internal_errno_t error);
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_send(nsw_internal_errno_t error);
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_recv(nsw_internal_errno_t error);
+    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_close(nsw_internal_errno_t error);
 
     /* <- WARNING: not a doxygen comment
     \param error

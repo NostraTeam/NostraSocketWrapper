@@ -17,7 +17,7 @@ void check_error_codes()
 {
     nsw_error_t error = NSW_ESUCCESS; /* value does not matter */
 
-    switch(error)
+    /*switch(error)
     {
         case NSW_EACCES:
             break;
@@ -92,20 +92,20 @@ void check_error_codes()
         case NSW_ETIMEDOUT:
             break;
 #ifndef NSW_POSIX /* Same as NSW_EAGAIN on POSIX */
-        case NSW_EWOULDBLOCK:
-            break;
-#endif
-        case NSW_ESYSNOTREADY:
-            break;
-        case NSW_EVERNOTSUPPORTED:
-            break;
-        case NSW_EPROCLIM:
-            break;
-        case NSW_ENNOTINITIALIZED:
-            break;
-        case NSW_ENETDOWN:
-            break;
-    }
+    /*        case NSW_EWOULDBLOCK:
+                break;
+    #endif
+            case NSW_ESYSNOTREADY:
+                break;
+            case NSW_EVERNOTSUPPORTED:
+                break;
+            case NSW_EPROCLIM:
+                break;
+            case NSW_ENNOTINITIALIZED:
+                break;
+            case NSW_ENETDOWN:
+                break;
+        }*/
 }
 
 int main(void)
@@ -129,7 +129,7 @@ int main(void)
         exit(__LINE__);
     }
 
-    nsw_error_t err = 1; /* it does not matter what error this is */
+    nsw_error_t err = NSW_ESUCCESS; /* it does not matter what error this is */
 
     /* set new error code */
     nsw_internal_set_errno(err);
