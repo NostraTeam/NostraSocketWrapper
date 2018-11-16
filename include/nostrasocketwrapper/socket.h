@@ -168,9 +168,9 @@ typedef int nsw_ssize_t;
 
     typedef struct sockaddr_in nsw_sockaddr_t;
 
-    nsw_reterr_t nsw_initialize(void);
+    NSW_EXPORT nsw_reterr_t nsw_initialize(void);
 
-    nsw_reterr_t nsw_terminate(void);
+    NSW_EXPORT nsw_reterr_t nsw_terminate(void);
 
     /**
     \param af
@@ -269,19 +269,19 @@ typedef int nsw_ssize_t;
                                        nsw_socket_type_t type,
                                        nsw_socket_protocol_t protocol);
 
-    nsw_sockaddr_t *nsw_clear_sockaddr(nsw_sockaddr_t *sockaddr);
+    NSW_EXPORT nsw_sockaddr_t *nsw_clear_sockaddr(nsw_sockaddr_t *sockaddr);
 
-    nsw_reterr_t nsw_connect(nsw_socket_t socket, const nsw_sockaddr_t *addr);
+    NSW_EXPORT nsw_reterr_t nsw_connect(nsw_socket_t socket, const nsw_sockaddr_t *addr);
 
-    nsw_reterr_t nsw_bind(nsw_socket_t socket, const nsw_sockaddr_t *addr);
+    NSW_EXPORT nsw_reterr_t nsw_bind(nsw_socket_t socket, const nsw_sockaddr_t *addr);
 
-    nsw_reterr_t nsw_listen(nsw_socket_t socket, int backlog);
+    NSW_EXPORT nsw_reterr_t nsw_listen(nsw_socket_t socket, int backlog);
 
-    nsw_socket_t nsw_accept(nsw_socket_t socket, nsw_sockaddr_t *addr);
+    NSW_EXPORT nsw_socket_t nsw_accept(nsw_socket_t socket, nsw_sockaddr_t *addr);
 
-    nsw_ssize_t nsw_send(nsw_socket_t socket, const void *data, size_t len, unsigned int flags);
+    NSW_EXPORT nsw_ssize_t nsw_send(nsw_socket_t socket, const void *data, size_t len, unsigned int flags);
 
-    nsw_ssize_t nsw_recv(nsw_socket_t socket, void *data, size_t len, unsigned int flags);
+    NSW_EXPORT nsw_ssize_t nsw_recv(nsw_socket_t socket, void *data, size_t len, unsigned int flags);
 
     /**
     \param socket

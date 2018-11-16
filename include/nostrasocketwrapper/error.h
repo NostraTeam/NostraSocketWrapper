@@ -223,7 +223,7 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    extern nsw_error_t nsw_get_error(void);
+    NSW_EXPORT extern nsw_error_t nsw_get_error(void);
 
     /**
     \param error
@@ -236,11 +236,11 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    extern void nsw_set_error(nsw_error_t error);
+    NSW_EXPORT extern void nsw_set_error(nsw_error_t error);
 
-    extern nsw_error_t nsw_internal_get_errno();
+    NSW_NO_EXPORT extern nsw_error_t nsw_internal_get_errno();
 
-    extern void nsw_internal_set_errno(nsw_error_t error);
+    NSW_NO_EXPORT extern void nsw_internal_set_errno(nsw_error_t error);
 
     /* <- WARNING: not a doxygen comment
     \param error
