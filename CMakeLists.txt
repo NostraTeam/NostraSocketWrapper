@@ -152,9 +152,46 @@ function(nsw_add_cpp_test TEST_NAME)
             "test/${TEST_NAME}.d")
 endfunction()
 
+function(nsw_prefix_list OUT PREFIX)
+	set(LIST_INTERNAL "")
+
+	foreach(STR IN LISTS ARGN)
+		list(APPEND LIST_INTERNAL "${PREFIX}${STR}")
+	endforeach()
+
+	set("${OUT}" "${LIST_INTERNAL}" PARENT_SCOPE)
+endfunction()
+
 # Function for simpler addition of C tests
 function(nsw_add_c_test TEST_NAME)
-	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.d/src/${TEST_NAME}.c")
+	cmake_parse_arguments(NSW_FUNC "NOCOPY" "" "ADDITIONAL_SOURCES" "${ARGN}")
+
+	if(DEFINED NSW_FUNC_UNPARSED_ARGUMENTS)
+		message(SEND_ERROR "NostraSocketWrapper: nsw_add_c_test(): unknown argument: ${NSW_FUNC_UNPARSED_ARGUMENTS}")
+	endif()
+
+	if(NOT NSW_FUNC_NOCOPY)
+		
+		# Make sure the working directory for the command exists
+		# This is only required if the resources were copied, 
+		file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/test/${TEST_NAME}.d")
+
+		# If the resources folder exists, copy it
+		if(EXISTS "${CMAKE_SOURCE_DIR}/test/${TEST_NAME}.d/resources")
+			file(COPY "test/${TEST_NAME}.d/resources" DESTINATION "${CMAKE_BINARY_DIR}/test/${TEST_NAME}.d")
+		endif()
+
+		# Set working dir to test/${TEST_NAME}.d in the binary dir because resources have been copied
+		set(NSW_WORKING_DIR "${CMAKE_BINARY_DIR}/test/${TEST_NAME}.d")
+	else()
+		# Set working dir to test/${TEST_NAME}.d in the source dir because resources have not been copied
+		set(NSW_WORKING_DIR "${CMAKE_SOURCE_DIR}/test/${TEST_NAME}.d")
+	endif()
+
+	# Properly prefix the additional source files to locate them in test/<test name>.d/src/
+	nsw_prefix_list(NSW_FUNC_ACTUAL_ADD_SOURCES "test/${TEST_NAME}.d/src/" "${NSW_FUNC_ADDITIONAL_SOURCES}")
+
+	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.d/src/${TEST_NAME}.c" "${NSW_FUNC_ACTUAL_ADD_SOURCES}")
 	
 	target_link_libraries("nsw.c.${TEST_NAME}" Nostra::SocketWrapper)
 
@@ -163,17 +200,27 @@ function(nsw_add_c_test TEST_NAME)
 			DESTINATION "test/nsw.${TEST_NAME}.d"
 			COMPONENT "Test")
 
+	# Install ressources folder from the SOURCES directory (if it exists)
+	if(EXISTS "${CMAKE_SOURCE_DIR}/test/${TEST_NAME}.d/resources")
+		install(DIRECTORY "${CMAKE_SOURCE_DIR}/test/${TEST_NAME}.d/resources" 
+			DESTINATION
+				"test/nsw.${TEST_NAME}.d"
+			COMPONENT 
+				"Test")
+	endif()
+
 	add_test(
 		NAME 
 			"nsw.c.${TEST_NAME}"
 		COMMAND 
 			"nsw.c.${TEST_NAME}"
         WORKING_DIRECTORY
-            "test/${TEST_NAME}.d")
+			"${NSW_WORKING_DIR}")
 endfunction()
 
 # Function to convert from a C test to a C++ test
 function(nsw_c_test_to_cpp TEST_NAME)
+#[[
 	configure_file("test/${TEST_NAME}.d/src/${TEST_NAME}.c" "${CMAKE_BINARY_DIR}/test/${TEST_NAME}.d/src/${TEST_NAME}.cpp" COPYONLY)
 
 	add_executable("nsw.cpp.${TEST_NAME}" "${CMAKE_BINARY_DIR}/test/${TEST_NAME}.d/src/${TEST_NAME}.cpp")
@@ -191,7 +238,8 @@ function(nsw_c_test_to_cpp TEST_NAME)
 		COMMAND 
 			"nsw.cpp.${TEST_NAME}"
         WORKING_DIRECTORY
-            "test/${TEST_NAME}.d")
+			"test/${TEST_NAME}.d")
+			]]
 endfunction()
 
 enable_testing()
