@@ -15,7 +15,7 @@ A test for the component error.
 // if this function compiles, there are no overlapping error codes and all codes are valid integer numbers
 void check_error_codes()
 {
-    nsw_error_t error = NSW_ESUCCESS; //value does not matter
+    nsw_error_t error = NSW_ESUCCESS; // value does not matter
 
     switch(error)
     {
@@ -91,8 +91,10 @@ void check_error_codes()
             break;
         case NSW_ETIMEDOUT:
             break;
+#ifndef NSW_POSIX // Same as NSW_EAGAIN on POSIX
         case NSW_EWOULDBLOCK:
             break;
+#endif
         case NSW_ESYSNOTREADY:
             break;
         case NSW_EVERNOTSUPPORTED:
@@ -127,7 +129,7 @@ int main(void)
         exit(__LINE__);
     }
 
-    nsw_error_t err = 1;  // it does not matter what error this is
+    nsw_error_t err = 1; // it does not matter what error this is
 
     // set new error code
     nsw_internal_set_errno(err);

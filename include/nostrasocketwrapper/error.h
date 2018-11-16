@@ -114,14 +114,14 @@ An example that demonstrates the usage of the functionality provided by the erro
 #    define NSW_EPERM EPERM
 #    define NSW_EPIPE EPIPE
 #    define NSW_EPROTO EPROTO
-#    define NSW_EPROTONOSUPPORT EPROTONOSUPPOR
+#    define NSW_EPROTONOSUPPORT EPROTONOSUPPORT
 #    define NSW_EPROTOTYPE EPROTOTYPE
 #    define NSW_EROFS EROFS
 #    define NSW_ETIMEDOUT ETIMEDOUT
 #    define NSW_EWOULDBLOCK EWOULDBLOCK
 #    define NSW_ESYSNOTREADY -1
 #    define NSW_EVERNOTSUPPORTED -2
-#    define NSW_EINPROGRESS -3
+#    define NSW_EPROCLIM -3
 #    define NSW_ENNOTINITIALIZED -4
 #    define NSW_ENETDOWN -5
 #elif defined(NSW_WINSOCK)
