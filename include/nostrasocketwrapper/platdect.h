@@ -35,21 +35,21 @@ For a more detailed example, see \link platdect.ex.c here\endlink.
 An example that demonstrates the usage of the functionality provided by the platdect component.
 */
 
-// make sure not both overrides are defined
+/* make sure not both overrides are defined */
 #if defined(NSW_LIB_OVERRIDE_POSIX) && defined(NSW_LIB_OVERRIDE_WINSOCK)
 #    error "NSW_LIB_OVERRIDE_POSIX and NSW_LIB_OVERRIDE_WINSOCK can not be defined at the same time."
 #endif
 
-#ifndef _DOXYGEN_ // proper implementation without Doxygen
+#ifndef _DOXYGEN_ /* proper implementation without Doxygen */
 
-// use overrides
+/* use overrides */
 #    if defined(NSW_LIB_OVERRIDE_POSIX)
 #        define NSW_POSIX
 #    elif defined(NSW_LIB_OVERRIDE_WINSOCK)
 #        define NSW_WINSOCK
 #    endif
 
-// if no overrides are defined, detect platform
+/* if no overrides are defined, detect platform */
 #    if !defined(NSW_WINSOCK) && !defined(NSW_POSIX)
 #        if defined(__unix__) || defined(__APPLE__)
 #            define NSW_POSIX
@@ -59,9 +59,9 @@ An example that demonstrates the usage of the functionality provided by the plat
 #            error "Operating system is not supported."
 #        endif
 #    endif
-#else // Doxygen
+#else /* Doxygen */
 
-// Empty definitions for Doxygen; only these need to be documented
+/* Empty definitions for Doxygen; only these need to be documented */
 
 /**
 \brief

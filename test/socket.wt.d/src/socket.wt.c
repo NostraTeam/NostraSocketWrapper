@@ -13,14 +13,14 @@ A test for the component socket.
 
 #ifdef NSW_POSIX
 #    include <sys/socket.h>
-#    include <sys/types.h> //for old BSD
+#    include <sys/types.h> /* for old BSD */
 #elif defined(NSW_WINSOCK)
 #    include <WinSock2.h>
 #endif
 
 void test_constants()
 {
-    if (NSW_AF_INET != AF_INET)
+    if(NSW_AF_INET != AF_INET)
     {
         printf("Failed in line: %d\n", __LINE__);
         exit(__LINE__);
@@ -48,7 +48,7 @@ void test_constants()
 void test_socket(void)
 {
     {
-        // IPv4; TCP
+        /* IPv4; TCP */
         nsw_socket_t sock = nsw_socket(NSW_AF_INET, NSW_SOCK_STREAM, 0);
 
         if(sock == -1)
@@ -69,7 +69,7 @@ void test_socket(void)
     }
 
     {
-        // IPv4; UDP
+        /* IPv4; UDP */
         nsw_socket_t sock = nsw_socket(NSW_AF_INET6, NSW_SOCK_STREAM, 0);
 
         if(sock == -1)
@@ -91,7 +91,7 @@ void test_socket(void)
     }
 
     {
-        // IPv6; TCP
+        /* IPv6; TCP */
         nsw_socket_t sock = nsw_socket(NSW_AF_INET, NSW_SOCK_DGRAM, 0);
 
         if(sock == -1)
@@ -112,7 +112,7 @@ void test_socket(void)
     }
 
     {
-        // IPv6; UDP
+        /* IPv6; UDP */
         nsw_socket_t sock = nsw_socket(NSW_AF_INET6, NSW_SOCK_DGRAM, 0);
 
         if(sock == -1)
@@ -145,7 +145,7 @@ void test_close(void)
         }
         else
         {
-            // close proper socket
+            /* close proper socket */
             nsw_reterr_t err = nsw_close(sock);
 
             if(err == -1)
@@ -157,9 +157,9 @@ void test_close(void)
     }
 
     {
-        nsw_socket_t sock = -5; // invalid socket ID
+        nsw_socket_t sock = -5; /* invalid socket ID */
 
-        // close proper socket
+        /* close proper socket */
         nsw_reterr_t err = nsw_close(sock);
 
         if(err != -1)

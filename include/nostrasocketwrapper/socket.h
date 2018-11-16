@@ -41,7 +41,7 @@ An example that demonstrates the usage of the functionality provided by the sock
 
 #ifdef NSW_POSIX
 #    include <sys/socket.h>
-#    include <sys/types.h> //for old BSD
+#    include <sys/types.h> /* for old BSD */
 #elif defined(NSW_WINSOCK)
 #endif
 
@@ -52,14 +52,14 @@ An example that demonstrates the usage of the functionality provided by the sock
 #    define NSW_SOCK_STREAM SOCK_STREAM
 #    define NSW_SOCK_DGRAM SOCK_DGRAM
 #elif defined(NSW_WINSOCK)
-#    define NSW_AF_INET 2   // AF_INET
-#    define NSW_AF_INET6 23 // AF_INET6
+#    define NSW_AF_INET 2   /* AF_INET */
+#    define NSW_AF_INET6 23 /* AF_INET6 */
 
-#    define NSW_SOCK_STREAM 1 // SOCK_STREAM
-#    define NSW_SOCK_DGRAM 2  // SOCK_DGRAM
+#    define NSW_SOCK_STREAM 1 /* SOCK_STREAM */
+#    define NSW_SOCK_DGRAM 2  /* SOCK_DGRAM */
 #elif _DOXYGEN_
 
-// Empty definitions for Doxygen; only these need to be documented
+/* Empty definitions for Doxygen; only these need to be documented */
 
 /**
 \brief
@@ -344,7 +344,7 @@ typedef int nsw_ssize_t;
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    NSW_EXPORT bool nsw_is_socket(nsw_socket_t socket); ///\todo Rename to nsw_is_socket()
+    NSW_EXPORT bool nsw_is_socket(nsw_socket_t socket);
 
 #ifdef __cplusplus
 }

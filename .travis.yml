@@ -18,7 +18,7 @@ script:
   - cd build
   - cmake -DNSW_BUILD_SHARED=$BUILD_SHARED -DNSW_BUILD_DOC=OFF -DNSW_BUILD_EXAMPLES=ON -DBUILD_TESTING=ON ..
   - cmake --build . -- -j2
-  - ctest
+  - ctest --output-on-failure
 
 matrix:
   exclude:

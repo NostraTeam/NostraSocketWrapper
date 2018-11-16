@@ -70,16 +70,16 @@ An example that demonstrates the usage of the functionality provided by the erro
 #ifdef NSW_POSIX
 #    include <errno.h>
 #elif defined(NSW_WINSOCK)
-#    include <WinSock2.h> ///\todo remove this include
+#    include <WinSock2.h> /** \todo remove this include */
 #endif
 
 #define NSW_ESUCCESS 0
-//#define NSW_ESUCCESS_NAME "NSW_ESUCCESS"
-//#define NSW_ESUCCESS_TEXT "No error happened."
+/*#define NSW_ESUCCESS_NAME "NSW_ESUCCESS" */
+/*#define NSW_ESUCCESS_TEXT "No error happened." */
 
 #define NSW_EUNKNOWN -1
-//#define NSW_EUNKNOWN_NAME "NSW_EUNKNOWN"
-//#define NSW_EUNKNOWN_TEXT "An unknown error happened."
+/* #define NSW_EUNKNOWN_NAME "NSW_EUNKNOWN" */
+/* #define NSW_EUNKNOWN_TEXT "An unknown error happened." */
 
 #ifdef NSW_POSIX
 #    define NSW_EACCES EACCES
@@ -242,7 +242,7 @@ extern "C"
 
     extern void nsw_internal_set_errno(nsw_error_t error);
 
-    /* // <- WARNING: not a doxygen comment
+    /* <- WARNING: not a doxygen comment
     \param error
     The error code to get the name of.
 
@@ -253,9 +253,9 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    // NSW_EXPORT const char *nsw_errorName(nsw_error_t error);
+    /* NSW_EXPORT const char *nsw_errorName(nsw_error_t error); */
 
-    /* // <- WARNING: not a doxygen comment
+    /* <- WARNING: not a doxygen comment
     \param error
     The error code to get the description text of.
 
@@ -266,7 +266,7 @@ extern "C"
     \version 1.0.0.0
     \since   1.0.0.0
     */
-    // NSW_EXPORT const char *nsw_errorText(nsw_error_t error);
+    /* NSW_EXPORT const char *nsw_errorText(nsw_error_t error); */
 
 #ifdef __cplusplus
 }

@@ -11,11 +11,11 @@ A test for the component error.
 #include <stdio.h>
 #include <stdlib.h>
 
-// a giant switch with all available error codes
-// if this function compiles, there are no overlapping error codes and all codes are valid integer numbers
+/* a giant switch with all available error codes */
+/* if this function compiles, there are no overlapping error codes and all codes are valid integer numbers */
 void check_error_codes()
 {
-    nsw_error_t error = NSW_ESUCCESS; // value does not matter
+    nsw_error_t error = NSW_ESUCCESS; /* value does not matter */
 
     switch(error)
     {
@@ -91,7 +91,7 @@ void check_error_codes()
             break;
         case NSW_ETIMEDOUT:
             break;
-#ifndef NSW_POSIX // Same as NSW_EAGAIN on POSIX
+#ifndef NSW_POSIX /* Same as NSW_EAGAIN on POSIX */
         case NSW_EWOULDBLOCK:
             break;
 #endif
@@ -112,34 +112,34 @@ int main(void)
 {
     check_error_codes();
 
-    // check if properly initialized
+    /* check if properly initialized */
     if(nsw_get_error() != NSW_ESUCCESS)
     {
         printf("Failed in line: %d\n", __LINE__);
         exit(__LINE__);
     }
 
-    // set new error code
+    /* set new error code */
     nsw_set_error(NSW_EACCES);
 
-    // check if new error code was actually set
+    /* check if new error code was actually set */
     if(nsw_get_error() != NSW_EACCES)
     {
         printf("Failed in line: %d\n", __LINE__);
         exit(__LINE__);
     }
 
-    nsw_error_t err = 1; // it does not matter what error this is
+    nsw_error_t err = 1; /* it does not matter what error this is */
 
-    // set new error code
+    /* set new error code */
     nsw_internal_set_errno(err);
 
-    // check if new error code was actually set
+    /* check if new error code was actually set */
     if(nsw_internal_get_errno() != err)
     {
         printf("Failed in line: %d\n", __LINE__);
         exit(__LINE__);
     }
 
-    ///\todo add checks if the error code is actually thread local
+    /**\todo add checks if the error code is actually thread local */
 }

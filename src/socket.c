@@ -23,7 +23,7 @@ extern "C"
     nsw_reterr_t nsw_initialize(void)
     {
 #ifdef NSW_POSIX
-        // NO-OP on Unix
+        /* NO-OP on Unix */
         return 0;
 #elif defined(NSW_WINSOCK)
     WSADATA wsdata;
@@ -44,7 +44,7 @@ extern "C"
     nsw_reterr_t nsw_terminate(void)
     {
 #ifdef NSW_POSIX
-        // NO-OP on Unix
+        /* NO-OP on Unix */
         return 0;
 #elif defined(NSW_WINSOCK)
 
@@ -69,7 +69,7 @@ extern "C"
 
         nsw_socket_t ret = (nsw_socket_t)socket(af, type, protocol);
 
-        if(ret == NSW_INVALID_SOCKET) // error
+        if(ret == NSW_INVALID_SOCKET)
         {
             nsw_set_error(nsw_internal_get_errno());
 
