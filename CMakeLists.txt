@@ -50,7 +50,8 @@ else()
 		PRIVATE
 			"-Wall"
 			"-Wextra"
-			"-Wpedantic")
+			"-Wpedantic"
+			"-fPIC")
 endif()
 
 if(NSW_RESTORE_ERRNO)
@@ -138,6 +139,10 @@ function(nsw_add_cpp_test TEST_NAME)
 
 	target_link_libraries("nsw.cpp.${TEST_NAME}" Nostra::SocketWrapper)
 
+	target_compile_definitions("nsw.cpp.${TEST_NAME}" 
+		PRIVATE 
+			"NSW_TEST_INTERFACES")
+
 	install(TARGETS "nsw.cpp.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 
 			DESTINATION "test/nsw.${TEST_NAME}.d"
@@ -194,6 +199,10 @@ function(nsw_add_c_test TEST_NAME)
 	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.d/src/${TEST_NAME}.c" "${NSW_FUNC_ACTUAL_ADD_SOURCES}")
 	
 	target_link_libraries("nsw.c.${TEST_NAME}" Nostra::SocketWrapper)
+
+	target_compile_definitions("nsw.c.${TEST_NAME}" 
+		PRIVATE 
+			"NSW_TEST_INTERFACES")
 
 	install(TARGETS "nsw.c.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 

@@ -264,18 +264,20 @@ extern "C"
     */
     NSW_EXPORT extern void nsw_set_error(nsw_error_t error);
 
-    NSW_NO_EXPORT extern nsw_internal_errno_t nsw_internal_get_errno();
+    /** \todo Mark as NSW_NO_EXPORT (currently, with NSW_NO_EXPORT tests don't work) */
 
-    NSW_NO_EXPORT extern void nsw_internal_set_errno(nsw_internal_errno_t error);
+    NSW_EXPORT extern nsw_internal_errno_t nsw_internal_get_errno();
 
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_socket(nsw_internal_errno_t error);
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_connect(nsw_internal_errno_t error);
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_bind(nsw_internal_errno_t error);
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_listen(nsw_internal_errno_t error);
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_accept(nsw_internal_errno_t error);
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_send(nsw_internal_errno_t error);
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_recv(nsw_internal_errno_t error);
-    NSW_NO_EXPORT nsw_error_t nsw_internal_map_error_close(nsw_internal_errno_t error);
+    NSW_EXPORT extern void nsw_internal_set_errno(nsw_internal_errno_t error);
+
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_socket(nsw_internal_errno_t error);
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_connect(nsw_internal_errno_t error);
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_bind(nsw_internal_errno_t error);
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_listen(nsw_internal_errno_t error);
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_accept(nsw_internal_errno_t error);
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_send(nsw_internal_errno_t error);
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_recv(nsw_internal_errno_t error);
+    NSW_EXPORT nsw_error_t nsw_internal_map_error_close(nsw_internal_errno_t error);
 
     /* <- WARNING: not a doxygen comment
     \param error
