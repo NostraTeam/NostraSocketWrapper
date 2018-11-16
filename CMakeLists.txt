@@ -128,44 +128,70 @@ else()
 
 endif()
 
-# Function for simpler addition of tests
+# Function for simpler addition of C++ tests
 function(nsw_add_cpp_test TEST_NAME)
-	add_executable("nsw.cpp.${TEST_NAME}" "test/${TEST_NAME}.cpp")
+	add_executable("nsw.cpp.${TEST_NAME}" "test/${TEST_NAME}.d/src/${TEST_NAME}.cpp")
 	
-	target_link_libraries("nsw.cpp.${TEST_NAME}" Nostra::SocketWrapper)
-
-	target_compile_features(NostraSocketWrapper 
+	target_compile_features("nsw.cpp.${TEST_NAME}" 
 		PUBLIC
 			cxx_std_11)
 
+	target_link_libraries("nsw.cpp.${TEST_NAME}" Nostra::SocketWrapper)
+
 	install(TARGETS "nsw.cpp.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 
-			DESTINATION "test"
+			DESTINATION "test/nsw.${TEST_NAME}.d"
 			COMPONENT "Test")
 
 	add_test(
 		NAME 
 			"nsw.cpp.${TEST_NAME}"
 		COMMAND 
-			"nsw.cpp.${TEST_NAME}")
+			"nsw.cpp.${TEST_NAME}"
+        WORKING_DIRECTORY
+            "test/${TEST_NAME}.d")
 endfunction()
 
-# Function for simpler addition of tests
+# Function for simpler addition of C tests
 function(nsw_add_c_test TEST_NAME)
-	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.c")
+	add_executable("nsw.c.${TEST_NAME}" "test/${TEST_NAME}.d/src/${TEST_NAME}.c")
 	
 	target_link_libraries("nsw.c.${TEST_NAME}" Nostra::SocketWrapper)
 
 	install(TARGETS "nsw.c.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
 		RUNTIME 
-			DESTINATION "test"
+			DESTINATION "test/nsw.${TEST_NAME}.d"
 			COMPONENT "Test")
 
 	add_test(
 		NAME 
 			"nsw.c.${TEST_NAME}"
 		COMMAND 
-			"nsw.c.${TEST_NAME}")
+			"nsw.c.${TEST_NAME}"
+        WORKING_DIRECTORY
+            "test/${TEST_NAME}.d")
+endfunction()
+
+# Function to convert from a C test to a C++ test
+function(nsw_c_test_to_cpp TEST_NAME)
+	configure_file("test/${TEST_NAME}.d/src/${TEST_NAME}.c" "${CMAKE_BINARY_DIR}/test/${TEST_NAME}.d/src/${TEST_NAME}.cpp" COPYONLY)
+
+	add_executable("nsw.cpp.${TEST_NAME}" "${CMAKE_BINARY_DIR}/test/${TEST_NAME}.d/src/${TEST_NAME}.cpp")
+	
+	target_link_libraries("nsw.cpp.${TEST_NAME}" Nostra::SocketWrapper)
+
+	install(TARGETS "nsw.cpp.${TEST_NAME}" EXPORT NostraSocketWrapperTargets
+		RUNTIME 
+			DESTINATION "test/nsw.${TEST_NAME}.d"
+			COMPONENT "Test")
+
+	add_test(
+		NAME 
+			"nsw.cpp.${TEST_NAME}"
+		COMMAND 
+			"nsw.cpp.${TEST_NAME}"
+        WORKING_DIRECTORY
+            "test/${TEST_NAME}.d")
 endfunction()
 
 enable_testing()
@@ -176,7 +202,7 @@ if(BUILD_TESTING)
 	nsw_add_c_test(error.wt)
 
 	if(NSW_USE_CPP)
-		nsw_add_cpp_test(error.wt)
+		nsw_c_test_to_cpp(error.wt)
 	endif()
 endif()
 # Tests end
